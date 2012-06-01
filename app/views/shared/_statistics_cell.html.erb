@@ -1,0 +1,9 @@
+<div class="clp_box"  style="background-color:#ffffff;border-color:#ababab;">
+	<p><h4>投票统计卡：</h4></p>
+	<p>
+		<strong>发起投票：</strong><span class="badge badge-info"><%= current_user.votes.count %></span>
+	</p>
+	<p>
+		<strong>参与投票：</strong><span class="badge badge-info" id="cast_counter2"><%= current_user.cast_votes.count %></span>
+	</p>
+</div>

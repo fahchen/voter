@@ -1,0 +1,22 @@
+<script type="text/javascript">
+	$('.nav li').eq(<%= signed_in? ? '3' : '2' %>).attr('class', 'active');
+</script>
+<div class="row-fluid">
+	<div class="span2"></div>
+  <div class="clp_box span8" style="padding-top:20px;padding-bottom:20px;background-color:#ffffff;border-color:#ababab;" id="main_box">
+		<legend>联系我们</legend>
+		<p>
+			<p><h4>我们来自</h4></p>
+			<p>电子科技大学通信学院</p>
+		</p>
+		<p>
+			<p><h4>我们的联系方式</h4></p>
+			<p>
+				<strong>邮箱地址：</strong><small>clpliuping@126.com</small><br />
+				<strong>联系电话：</strong><small>15196604105</small>
+			</p>
+		</p>
+	</div>
+	<div class="span2">
+	</div>
+</div>

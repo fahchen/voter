@@ -1,0 +1,12 @@
+noty({"text":"投票成功，谢谢参与。","theme":"noty_theme_twitter","layout":"topLeft","type":"success","animateOpen":{"height":"toggle"},"animateClose":{"height":"toggle"},"speed":500,"timeout":2500,"closeButton":true,"closeOnSelfClick":true,"closeOnSelfOver":false,"modal":false});
+
+badges = $('.span1').children('.badge');
+bars = $('.bar');
+$('#cast_counter1').html(parseInt($('#cast_counter1').html()) + 1);
+$('#cast_counter2').html(parseInt($('#cast_counter2').html()) + 1);
+<% @statistics.each_with_index do |s, i| %>
+	badges.eq(<%= i %>).html("<%= s[0] %>");
+	bars.eq(<%= i %>).attr('style', 'width: <%= s[1].round(2) %>%');
+	bars.eq(<%= i %>).attr('title', '<%= s[1].round(2) %>%');
+	bars.eq(<%= i %>).attr('data-original-title', '<%= s[1].round(2) %>%');
+<% end %>

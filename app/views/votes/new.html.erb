@@ -1,0 +1,10 @@
+<script type="text/javascript">
+	$('.nav li').eq(1).attr('class', 'active');
+</script>
+<% provide(:title, 'New Vote') %>
+
+<div class="row-fluid">
+	<div class="span1"></div>
+	<%= render 'form' %>
+	<%= render 'shared/right_panel' %>
+</div>

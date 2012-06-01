@@ -1,0 +1,5 @@
+<div class="<%= 'active' if hot_piece_counter == 0 %> item">
+  <p><h4 style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" onmouseover="$(this).tooltip('show')" rel="tooltip"  data-original-title="<%= hot_piece.title %>"><%= link_to hot_piece.title, hot_piece %></h4></p>
+	<p>参与人数：<strong><%= hot_piece.cast_users.count %></strong></p>
+	<p>发起人：<strong><%= hot_piece.user.name %></strong></p>
+</div>

@@ -1,0 +1,11 @@
+<div class="span12 form-inline" style="margin-left:0;margin-bottom:10px;">
+	<span class="clp_js_num label label-info">1</span>
+	<%= f.text_field :description, class: 'input-xxlarge' %>
+	<%= f.hidden_field :_destroy %>
+	<span>&nbsp;&nbsp;</span>
+	<label>
+		<%= link_to "删除此项", 'javascript:;',
+				class: 'remove_fields'
+				 %>
+	</label>
+</div>

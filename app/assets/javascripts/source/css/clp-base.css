@@ -1,0 +1,47 @@
+.clp_box{
+	border:1px solid #e5e5e5;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
+	padding:6px 19px;
+	min-height:20px;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+.clp_font_die{
+	color:#cccccc;
+}
+.footer{
+	margin-top:45px;
+	padding:30px 0px 16px;
+	border-top:1px solid #e5e5e5;
+	margin:45px 70px 0px 70px;
+}
+.footer p{
+	height:10px;
+}
+.clp_aligncenter{
+	text-align:center;
+}
+.box{
+	height:auto;
+	width:auto;
+	padding:5px;
+}
+div#input_befor:hover{
+	border:1px solid ##F89406;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
+	padding:6px 19px;
+	min-height:20px;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+#main_box{
+	box-shadow: 1px 1px 2px #cccccc;
+	-moz-box-shadow: 1px 1px 2px #cccccc;
+	-webkit-box-shadow: 1px 1px 2px #cccccc;
+	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=135, Color='#cccccc');
+	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=135, Color='#cccccc')";
+}

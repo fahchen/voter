@@ -1,0 +1,199 @@
+<div class="clp_box span8" style="padding-top:20px;background-color:#ffffff;border-color:#ababab;" id="main_box">
+	<%= form_for(@vote, remote: true) do |f| %>
+		<div class="span12 row" style="margin-left:0;">
+			<div class="span6">
+				<span class="label label-info" style="font-size:16px;">主题</span>
+				<small style="color:#bebebe;">(最多15个字)</small>
+			</div>
+			<div class="span12" style="margin-left:0;">
+			<div class="clp_box span12"  onclick="show_after();" onmouseover="hover_style(this)" onmouseout="out_style(this)" style="cursor:pointer;margin:0px 0 20px 0;font-size:16px;letter-spacing:2px;text-align:center;font-family:'微软雅黑','Tahoma'; overflow:hidden;" id="input_before">
+			<%= @vote.title.nil? ? '	' : @vote.title %>
+			</div>
+			<%= f.text_field :title, class: 'span12',
+					onblur: 'show_before();',
+					id: 'input_after',
+					style: 'display:none;text-align:center;margin-bottom:20px;' %>
+			</div>
+		</div>
+		<div class="span12 row" style="margin-left:0;">
+			<div class="span6">
+				<span class="label label-info" style="font-size:16px;">描述</span>
+			</div>
+			<div class="span12 well" style="margin-left:0;font-size:14px;color:#4c4c4c;">
+				<%= f.text_area :description, :rows => 5, class: 'span12', style: 'width:100%;' %>
+			</div>
+		</div>
+		<div class="span12" style="margin-left:0;">
+			<div class="btn-group" data-toggle="buttons-radio">
+				<a class="btn btn-info <%= 'active' if @vote.multi.nil? || !@vote.multi %>" id="singel_btn" onclick="setTimeout(function(){show_multi()},200)">单选</a>
+				<a class="btn btn-info <%= 'active' unless @vote.multi.nil? || !@vote.multi %>" id="multi_btn" onclick="setTimeout(function(){show_multi()},200)">多选</a>
+			</div>
+			<%= f.hidden_field :multi, id: 'send_val', value: "#{@vote.multi.nil? ? 0 : @vote.multi}", style: 'display:none;' %><!-- 用于传送多选或单选值 -->
+		</div>
+		<div class="clp_box span12" style="margin-left:0;<%= 'display:none;' if @vote.multi.nil? || !@vote.multi %>" id="multi_box">
+			<div class="demo">
+				<p>
+					<label for="amount"><strong>选择限制：</strong></label>
+					<div>
+						<span>最少：</span>
+						<%= f.text_field :minoptions, value: "#{@vote.minoptions.nil? ? 1 : @vote.minoptions}",
+								id: 'amount_min',
+								style: 'max-width:15px;border:0;outline:none;font-weight:bold;cursor:default;width:43px;' %>
+						<span>&nbsp;&nbsp;最多：</span>
+						<%= f.text_field :maxoptions, value: "#{@vote.maxoptions.nil? ? 3 : @vote.maxoptions}",
+								id: 'amount_max',
+								style: 'max-width:15px;border:0;outline:none;font-weight:bold;cursor:default;width:43px;' %>
+					</div>
+				</p>
+				<div id="slider-range"></div>
+			</div>
+		</div>
+		<div class="span12" style="margin:0;margin-top:10px;">
+			<label><strong style="color:#4b4b4b;">截止日期：</strong></label>
+			<div class="row-fluid span12">
+				<%= f.datetime_select :expiration, class: 'input-small', start_year: Time.now.year, default: Time.now %>
+			</div>
+		</div>
+		<div class="span12" style="margin:0;"><hr style="border-top:1px dashed #ababab;" /></div>
+
+		<div class="span12 row" style="margin-left:0;margin-top:0px;">
+			<div class="clp_box span12" style="margin-left:0;margin-top:0px;" id="js_help_input">
+				<div class="span12 well" style="margin-left:0;margin-top:10px;margin-bottom:10px;">
+				  <%= f.fields_for :options do |builder| %>
+				  	<%= render 'option_fields', f: builder %>
+				  <% end %>
+					<label><%= link_to_add_fields "+添加项", f, :options %></label>
+				</div>
+			</div>
+		</div>
+		<div class="span12" style="margin-left:0;"><hr style="border-top:1px dashed #ababab;" /></div>
+		<div class="span12" style="margin-left:0;margin-bottom:20px;">
+			<div class="span10" style="margin-left:0;text-align:right;">
+				<%= link_to '返回首页', root_path, class: 'btn' %><span>&nbsp;&nbsp;</span>
+				<%= f.submit "发布", class: 'btn btn-primary', disable_with: '发布中...' %>
+			</div>
+		</div>
+	<% end %>
+</div>
+
+<%= stylesheet_link_tag 'source/css/jquery.ui.all' %>
+<%= stylesheet_link_tag 'source/css/demos' %>
+<style type="text/css">
+	select{
+		width:65px!important;
+	}
+</style>
+<script type="text/javascript">
+	function show_hot(){
+		$('.carousel').carousel()
+	}
+	function show_error(){//显示选项错误
+		var ele=$("#vote_error");
+		ele.fadeIn();
+	}
+	function error_reload(){
+		var ele=$("#vote_error");
+		ele.hide();
+	}
+	function hover_style(ele){
+		$(ele).css("border-color","#f89406");
+	}
+	function out_style(ele){
+		$(ele).css("border-color","#e5e5e5");
+	}
+	function show_before(){
+		var input_val=$("#input_after").val();
+		$("#input_after").hide();
+		$("#input_before").show();
+		$("#input_before").html(input_val);
+	}
+	function show_after(){
+		$("#input_before").hide();
+		$("#input_after").show();
+		$("#input_after").focus();
+	}
+	function show_multi(){
+		var singel=$("#singel_btn").attr("class").indexOf("active");
+		var multi=$("#multi_btn").attr("class").indexOf("active");
+		var multi_box=$("#multi_box");
+		var send_val=$("#send_val");
+		if(singel==-1){
+			multi_box.slideDown();
+			send_val.attr('value', 1);
+		}else{
+			multi_box.slideUp();
+			send_val.attr('value', 0);
+		}
+	}
+	function range_fresh(ele){
+		the_ele=$(ele).closest('div').filter(':visible').find('.clp_js_num');
+		for(var i=0;i<the_ele.length;i++){
+			the_ele.eq(i).html(String(eval(i+1)));
+		}
+	}
+	function remove_item(ele,fresh){
+		var key=$("#js_help_input input").length;
+		if(key>1){
+			var item=$(ele).closest("div");
+			item.remove();
+			range_fresh(fresh);
+			slide_func();
+		}
+	}
+	function add_item(ele,fresh){
+		var the_ele=$(ele).closest("label");
+		the_ele.before(
+			'<div class="span12 form-inline" style="margin-left:0;margin-bottom:10px;">'+
+						'<span class="clp_js_num label label-info">2</span>'+
+						'<input type="text" class="input-xxlarge" style="margin-left:4px;" />'+
+						'<span class="margin-left:2px;">&nbsp;&nbsp; </span>'+
+						'<label><a href="javascript:;" onclick="remove_item(this,'+'\'.clp_js_num\''+');">&nbsp;删除此项</a></label>'+
+					'</div>'
+		);
+		range_fresh(fresh);
+		slide_func();
+	}
+</script>
+<script>
+		window.onload = slide_func;
+
+  jQuery(function() {
+    $('form').on('click', '.remove_fields', function(event) {
+      $(this).closest('div').children('input[type=hidden]').val(true);
+      $(this).closest('div').hide();
+      range_fresh('.clp_js_num');
+			slide_func();
+      return event.preventDefault();
+    });
+    $('form').on('click', '.add_fields', function(event) {
+      var regexp, time;
+      time = new Date().getTime();
+      regexp = new RegExp($(this).data('id'), 'g');
+      $(this).closest('label').before($(this).data('fields').replace(regexp, time));
+      range_fresh('.clp_js_num');
+			slide_func();
+      return event.preventDefault();
+    });
+    slide_func();
+		range_fresh('.clp_js_num');
+  });
+	function slide_func(){$(function() {
+		var the_max=$("#js_help_input input").filter(':visible').length;
+		var ele1=parseInt($("#amount_min").val());
+		var ele2=parseInt($("#amount_max").val());
+		$( "#slider-range" ).slider({
+			range: true,
+			min: 1,
+			max: the_max,
+			values: [ ele1, ele2 ],
+			slide: function( event, ui ) {
+				$( "#amount_min" ).val( ui.values[ 0 ] );
+				$( "#amount_max" ).val( ui.values[ 1 ] );
+			}
+		});
+		$( "#amount_min" ).val( $( "#slider-range" ).slider( "values", 0 ) );
+		$( "#amount_max" ).val( $( "#slider-range" ).slider( "values", 1 ) );
+	});
+	}
+</script>
+

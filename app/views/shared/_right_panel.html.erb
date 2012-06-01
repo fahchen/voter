@@ -1,0 +1,6 @@
+<% @hot_votes = Vote.where("expiration > ? ", Time.now).order("caster_count DESC").limit(3) %>
+<div class="span2">
+	<%= render 'shared/hot_cell' %>
+	<%= render 'shared/statistics_cell' %>
+	<%= render 'shared/notice_cell' %>
+</div>

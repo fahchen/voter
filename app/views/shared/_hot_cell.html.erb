@@ -1,0 +1,12 @@
+<div class="clp_box"  style="background-color:#ffffff;border-color:#ababab;">
+	<span class="label label-important pull-right">Hot</span>
+	<div id="myCarousel" class="carousel slide">
+		<!-- Carousel items -->
+		<div class="carousel-inner">
+			<%= render partial: 'shared/hot_piece', collection: @hot_votes %>
+		</div>
+		<!-- Carousel nav -->
+		<a href="#myCarousel" class="pull-left" data-slide="prev"><i class="icon icon-chevron-left"></i></a>
+		<a href="#myCarousel" data-slide="next" class="pull-right"><i class="icon icon-chevron-right"></i></a>
+	</div>
+</div>

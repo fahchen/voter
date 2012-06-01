@@ -1,0 +1,10 @@
+<tr>
+	<td><%= vote_piece_counter + 1 %></td>
+	<td><%= link_to vote_piece.title, vote_piece %></td>
+	<% if Time.now - vote_piece.expiration >= 0 %>
+		<td><%= vote_piece.expiration.strftime("%Y年%m月%d日 %H:%M") %><span class="label">过期</span></td>
+	<% else %>
+		<td><%= vote_piece.expiration.strftime("%Y年%m月%d日 %H:%M") %></td>
+	<% end %>
+	<td><%= vote_piece.cast_users.count %></td>
+</tr>

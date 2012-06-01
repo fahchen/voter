@@ -1,0 +1,25 @@
+<div class="row-fluid">
+	<div class="span1"></div>
+	<% provide :title, "Index" %>
+	<div class="clp_box span8" style="margin-top:5px;padding-top:20px;border-color:#ababab;background-color:#ffffff;" id="main_box">
+		<div>
+			<label class="label label-info" style="font-size:14px;padding:6px;">&nbsp;&nbsp;近期发布
+			</label>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>主题</th>
+						<th>截止时间</th>
+						<th>参与人数</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%= render partial: 'shared/vote_piece', collection: @latest_votes %>
+				</tbody>
+			</table>
+		</div>
+		<%= will_paginate @latest_votes, {:previous_label => '上一页', :next_label => '下一页', class: 'flickr_pagination'} %>
+	</div>
+	<%= render 'shared/right_panel' %>
+</div>

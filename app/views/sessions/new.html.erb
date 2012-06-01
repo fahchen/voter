@@ -1,0 +1,127 @@
+<script type="text/javascript">
+  $('.nav li').eq(0).attr('class', 'active');
+</script>
+<% provide :title, "Sign in" %>
+<div class="row-fluid">
+  <div class="span2"></div>
+  <div class="span4" style="margin-top:150px;" id="js_top">
+    <h1>爱投吧</h1>
+    <div id="js_hide_3" style="">
+      <p><h3>小平台，大用处！</h3></p>
+      <p><h3>主打投票！打造最人性化的投票平台！</h3></p>
+    </div>
+  </div>
+  <div class="span1"></div>
+  <div class="span3 box" style="margin-top:140px;" id="js_hide_2">
+    <%= form_for(:session, url: sessions_path, remote: true, html: {class: 'well'}) do |f| %>
+      <fieldset>
+        <span class="label label-info pull-right">登录ATB</span>
+        <label><strong>用户名：</strong></label>
+        <%= f.text_field :name, class: 'span12', id: 'input01', onclick: 'error_cancel();' %>
+        <label><strong>密&nbsp;&nbsp;&nbsp;码：</strong></label>
+        <%= f.password_field :password, class: 'span12', id: 'input02', onclick: 'error_cancel();' %>
+        <div>
+          <a class="btn pull-left btn-small"  onclick="sign_action();">注 册</a>
+          <%= f.submit '登 录', class: 'btn btn-primary pull-right' %>
+        </div>
+        <div class="alert alert-error" style="margin-top:50px;margin-bottom:0px;display:none;" id="error_tips">
+          <p><strong>错误！</strong>用户名或密码错误！</p>
+        </div>
+      </fieldset>
+    <% end %>
+  </div>
+</div>
+<div class="clp_box offset2 span6" style="border-color:#ababab;padding:5px;background-color:#ffffff;display:none;margin-top:200px;" id="main_box">
+  <div class="row" style="margin:5px;"><button class="close" onclick="sign_action_back();">×</button>
+    <div class="span6">
+      <%= form_for(User.new, remote: true, html: {class: 'clp_box span4'}) do |f| %>
+        <label><span  class="label label-warning">注意！</span> 注册即表示同意本站的<%= link_to '相关协议', about_path %></label>
+        <label></label>
+        <label><span class="label label-info">用户名</span></label>
+        <%= f.text_field :name, class: 'input-xlarge', id: '1_input_group', onkeyup: 'check_sign_input(this.id,"4","8");check_all_input_ok();', autocomplete: 'off' %>
+        <span class="help-block">要注意用户名的长度哦！不要奇怪字符啦！<span class="badge" id="input_label_1">0</span></span>
+        <label><span class="label label-info">密 码</span></label>
+        <%= f.password_field :password, class: 'input-xlarge', id: '2_input_group', onkeyup: 'check_sign_input(this.id,"6","20");check_all_input_ok();' %>
+        <span class="help-block">密码长度也是有限制的啦！<span class="badge" id="input_label_2">0</span></span>
+        <label><span class="label label-info">重复密码</span></label>
+        <%= f.password_field :password_confirmation, class: 'input-xlarge', id: '3_input_group', onkeyup: 'check_all_input_ok();' %>
+        <span class="help-block">喂喂，确定这是和上面的一样吗？</span>
+        <%= f.submit '注 册', class: 'btn btn-primary', disabled: 'disabled', id: 'ok_btn' %>
+      <% end %>
+      <div class="span4 alert alert-error" style='display:none;' id="signup_error">
+        <strong>错误</strong>用户名已存在
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function alert_error(){
+    $("#error_tips").fadeIn();
+  }
+  function check_input(){
+    $("#error_tips").hide();
+    var ele1=$("#input01").val();
+    var ele2=$("#input02").val();
+    if(ele1&&ele2){}
+    else{alert_error();}
+  }
+  function error_cancel(){
+    $("#error_tips").hide();
+  }
+  function sign_action(){
+    var ele1=$("#js_hide_1");
+    var ele2=$("#js_hide_2");
+    var ele3=$("#js_hide_3");
+    var eletop=$("#js_top");
+    var ele=$("#main_box");
+    var eleup=$("#js_slideup");
+    ele1.stop().fadeOut("fast").queue(function(){
+      ele2.stop().fadeOut("fast").queue(function(){
+        ele3.stop().fadeOut("fast").queue(function(){
+          eletop.stop().animate({"margin-top":"0px"},200).queue(function(){
+            eleup.stop().slideUp("normal").queue(function(next){
+              ele.stop().fadeIn("fast").animate({"margin-top":"10px"},200);
+              next();
+            })
+            
+          })
+        })
+      })
+    })
+  }
+  function sign_action_back(){
+    var ele1=$("#js_hide_1");
+    var ele2=$("#js_hide_2");
+    var ele3=$("#js_hide_3");
+    var eletop=$("#js_top");
+    var ele=$("#main_box");
+    var eleup=$("#js_slideup");
+      ele.fadeOut().queue(function(){eleup.fadeIn().queue(function(){
+        eletop.stop().animate({"margin-top":"150px"},200).queue(function(){
+          ele3.stop().fadeIn().queue(function(){
+            ele2.stop().fadeIn().queue(function(){
+              ele1.stop().fadeIn().queue(function(){
+                stop();
+              })
+            })
+          })
+        })
+      })
+      
+      })  
+  }
+  function check_all_input_ok(){
+    $("#signup_error").fadeOut();
+    var key=check_input_ok('#2_input_group','#3_input_group','6','20','#ok_btn','off');
+    var username=$("#1_input_group").val();
+    var min=4;
+    var max=8;
+    if(username.length>=min&&username.length<=max&&key){
+      enable_btn("#ok_btn");
+    }else{
+      disable_btn("#ok_btn");
+    }
+    
+  }
+</script>

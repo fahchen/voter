@@ -1,0 +1,87 @@
+<div class="span12" style="margin-left:0;">
+	<span style="margin-left:5px;">只能选 <span class="badge badge-important" id="limit_items">1</span> 项</span>
+</div>
+<div class="span12 row" style="margin-left:0;">
+	<div class="span12">
+		<div class="form-inline span12" style="margin-left:0;">
+			<div class="clp_aligncenter span6">
+				<strong>选项</strong>
+			</div>
+			<div class="clp_aligncenter span1"><strong>票数</strong></div>
+			<div class="span1"></div>
+			<div class="clp_aligncenter span4"><strong>百分比</strong></div>
+		</div>
+	<%= form_tag('/cast_signal_vote', remote: true) do %>
+		<%= hidden_field_tag 'vote', @vote.id %>
+		<% options.each_with_index do |option, index| %>
+
+		<div class="form-inline span12" style="margin-left:0;">
+			<div class="span6">
+				<label><span><%= index + 1 %></span>. &nbsp;&nbsp;</label>
+				<label class="checkbox">
+					<% if current_user.cast_votes.include?(@vote) || @vote.expiration <= Time.now %>
+						<%= radio_button 'votes', 'options', option.id, checked: current_user.options.include?(option), disabled: 'disabled' %><span>&nbsp;</span>
+					<% else %>
+						<%= radio_button 'votes', 'options', option.id, checked: current_user.options.include?(option) %><span>&nbsp;</span>
+					<% end %>
+					<%= label_tag 'votes_options_' + "#{option.id}",
+								truncate(option.description, length: 20, omission: '...'),
+								rel: 'tooltip',
+								title: option.description,
+								onmouseover: '$(this).tooltip("show")',
+								style: 'color:#3b3b3b;' %>
+				</label>
+			</div>
+			<% if current_user.cast_votes.include?(@vote) || @vote.expiration <= Time.now %>
+				<div class="span1">
+					<span class="badge badge-success">
+						<%= option_total = UserOptionship.where("option_id = ?", option.id).count %>票
+					</span>
+				</div>
+				<div class="span1"></div>
+						<% total = UserOptionship.where("option_id in (?)", @vote.option_ids).count %>
+				
+				<div class="span4">
+					<div class="progress progress-striped">
+						<div class="bar"
+							style="width: <%= number_to_percentage(option_total/total.to_f*100, precision: 2) %>;"
+							rel="tooltip"
+							title="<%= number_to_percentage(option_total/total.to_f*100, precision: 2) %>"
+							onmouseover="$(this).tooltip('show')" >
+						</div>
+					</div>
+				</div>
+			<% else %>
+				<div class="span1">
+					<span class="badge badge-success">*票</span>
+				</div>
+				<div class="span1"></div>
+				<div class="span4">
+					<div class="progress progress-striped">
+						<div class="bar" style="width: 0%;" rel="tooltip" title="请先投票" onmouseover="$(this).tooltip('show')" ></div>
+					</div>
+				</div>
+			<% end %>
+		</div>
+		<% end %>
+		<div class="span12" style="margin-left:0;">
+			<hr style="border-top:1px dashed #ababab" />
+		</div>
+		<div class="span12" style="margin-left:0;margin-bottom:10px;">
+			<% if @vote.expiration <= Time.now %>
+				<button class="btn btn-primary pull-right" style="margin-right:10px;" disabled="disabled">投票已结束</button>
+			<% else %>
+				<%= submit_tag '投  票',
+						disable_with: '投票中...',
+						class: 'btn btn-primary pull-right',
+						style: 'margin-right:10px;',
+						onclick: 'error_reload();' %>
+			<% end %>
+			<%= link_to '修改', edit_vote_path(@vote), class: 'btn' if @vote.owner?(current_user) %>
+		</div>		
+	<% end %>
+		<div class="span12 alert alert-error" style="margin-left:0;margin-top:10px;display:none;" id="vote_error">
+			<strong>错误！</strong>选项有限制哦！下次别忘了啦！
+		</div>
+	</div>
+</div>

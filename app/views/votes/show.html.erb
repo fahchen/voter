@@ -1,0 +1,71 @@
+<% provide :title, @vote.title %>
+<div class="row-fluid">
+	<div class="span1"></div>
+	<div class="clp_box span8" style="padding-top:20px;background-color:#ffffff;border-color:#ababab;" id="main_box">
+		<div class="span12 row">
+			<div class="span12">
+				<span class="label label-info" style="font-size:16px;">主题</span>
+				<span class="pull-right" style="margin-right:5px;">参与人数:<span class="badge badge-important" id="cast_counter1"><%= @vote.cast_users.count %></span></span>
+			</div>
+			<div class="clp_box span12" style="margin:0px 0 20px 0;font-size:16px;letter-spacing:2px;text-align:center;font-family:'微软雅黑','Tahoma';overflow:hidden;">
+				<strong><%= @vote.title %></strong>
+			</div>
+		</div>
+		<div class="span12 row" style="margin-left:0;">
+			<div class="span6">
+				<span class="label label-info" style="font-size:16px;">描述</span>
+			</div>
+			<div class="span12 well" style="margin-left:0;font-size:14px;color:#4c4c4c;overflow:hidden;">
+				<%= @vote.description %>
+			</div>
+		</div>
+		<div class="span12" style="margin-left:0;">
+			<div class="span6">
+				<span class="label label-info" style="font-size:16px;">时间</span>
+			</div>
+			<div class="clp_box span12" style="margin:0px 0 20px 0;font-size:14px;letter-spacing:2px;text-align:center;font-family:'微软雅黑','Tahoma';">
+				<strong><%= @vote.created_at.strftime("%Y年%m月%d日 %H:%M") %>——<%= @vote.expiration.strftime("%Y年%m月%d日 %H:%M") %></strong>
+			</div>
+		</div>
+		<div class="span12" style="margin-left:0;"><hr style="border-top:1px dashed #ababab" /></div>
+
+		<% if @vote.multi %>
+			<%= render 'multi_vote', options: @vote.options %>
+		<% else %>
+			<%= render 'signal_vote', options: @vote.options %>
+		<% end %>
+
+	</div>
+	<%= render 'shared/right_panel' %>
+</div>
+<script type="text/javascript">
+	function show_hot(){
+		$('.carousel').carousel()
+	}
+	function show_error(){//显示选项错误
+		var ele=$("#vote_error");
+		ele.fadeIn();
+	}
+	function error_reload(){
+		var ele=$("#vote_error");
+		ele.hide();
+	}
+	function check_choose(){
+		var num=parseInt($("#limit_items").html());
+		var num_min=parseInt($("#limit_items_min").html());
+		var choice=$(".checkbox input");
+		var temp=0;
+		disable_btn("#ok_button");
+		for(var i in choice){
+			if(choice.eq(i).attr("checked")){
+				temp++;
+				if(temp>num||temp<num_min){
+					disable_btn("#ok_button");
+				}else{
+					enable_btn("#ok_button");
+				}
+			}
+			
+		}
+	}
+</script>
